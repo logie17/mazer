@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script type="module">
+    import { buildMaze, renderMaze } from './mazer.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const mazeEl = document.getElementById('maze');
+      const maze = buildMaze(mazeEl);
+       renderMaze(mazeEl, maze);
+    });
+    </script>
+    <style>
+      #maze {
+        position: relative;
+        height: 500px;
+        width: 500px;
+        border: 1px solid red;
+      }
+
+      .wall-left {
+        position: absolute;
+        display: block;
+        height: 50px;
+        width: 1px;
+        background: red;
+      }
+
+      .wall-top {
+        position: absolute;
+        display: block;
+        height: 1px;
+        width: 50px;
+        background: red;
+      }
+
+      .cell {
+        height: 50px;
+        width: 50px;
+        position: absolute;
+      }
+
+      @media print {
+        body {-webkit-print-color-adjust: exact;}
+      }
+    </style>
+  </head>
+  <body>
+    <div id="maze">
+    </div>
+  </body>
+</html>
+
