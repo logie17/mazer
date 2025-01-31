@@ -57,6 +57,33 @@ export const buildMaze = () => {
 
 }
 
+export const mazeToGraph = maze => {
+  let graph = {};
+  for (let x = 0; x < maze.length; x++) {
+    for (let y = 0; y < maze[x].length; y++) {
+      const cell = maze[x][y];
+      const possibleNeighbors = {
+        top: maze[cell.coords[0] - 1]?.[cell.coords[1]],
+        bottom: maze[cell.coords[0] + 1]?.[cell.coords[1]],
+        left: maze[cell.coords[0]]?.[cell.coords[1] - 1],
+        right: maze[cell.coords[0]]?.[cell.coords[1] + 1],
+      };
+      for (const wall of Object.keys(cell.walls)) {
+        if (cell.walls[wall]) {
+          delete possibleNeighbors[wall];
+        }
+      }
+
+      graph[`[${x},${y}]`] = []
+      for (const n of Object.values(possibleNeighbors)) {
+        graph[`[${x},${y}]`].push(JSON.stringify(n.coords))
+      }
+    }
+  }
+  return graph;
+}
+
+
 export const renderMaze = (mazeEl, maze) => {
 
   for (let x = 0; x < 10; x++) {
