@@ -1,13 +1,14 @@
 <html>
   <head>
     <script type="module">
-    import { buildMaze, renderMaze, mazeToGraph } from './mazer.js';
+    import { aStar, buildMaze, renderMaze, mazeToGraph } from './mazer.js';
     document.addEventListener('DOMContentLoaded', () => {
       const mazeEl = document.getElementById('maze');
-      const maze = buildMaze(mazeEl);
+      const {maze, start, end } = buildMaze(mazeEl);
       renderMaze(mazeEl, maze);
       const graph = mazeToGraph(maze);
-      console.log("#Graph", graph);
+      const path = aStar(start, end, () => {}, graph, maze)
+      console.log("#Path", path);
     });
     </script>
     <style>

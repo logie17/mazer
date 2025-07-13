@@ -58,7 +58,68 @@ export const buildMaze = () => {
   randomEndy = parseInt(Math.random() * maze[randomEndx].length);
 
   _buildMaze(maze[randomStartx][randomStarty]);
-  return maze;
+  return {
+    maze,
+    start: maze[randomStartx][randomStarty],
+    end: maze[randomEndx][randomEndy],
+  };
+};
+
+export const aStar = (start, goal, h, graph, maze) => {
+  const openSet = new Set([start]);
+  const closedSet = new Set();
+  const cameFrom = new Map();
+
+  start.g = 0;
+  start.h = h(start, goal);
+  start.parent = null;
+
+  while (openSet.size > 0) {
+    const current = Array.from(openSet).reduce((
+      a,
+      b,
+    ) => (a.g + a.h < b.g + b.h ? a : b));
+
+    if (
+      current.coords[0] === goal.coords[0] &&
+      current.coords[1] === goal.coords[1]
+    ) {
+      console.log("#### HERE222");
+
+      const path = [];
+      let temp = current;
+      while (temp) {
+        path.push(temp);
+        temp = cameFrom.get(temp);
+      }
+      return path.reverse();
+    }
+
+    openSet.delete(current);
+    closedSet.add(current);
+
+    for (
+      const neighborCoords
+        of graph[`[${current.coords[0]},${current.coords[1]}]`]
+    ) {
+      console.log("#### HERE111");
+      document.getElementById(`cell-${current.coords[0]}-${current.coords[1]}`)
+        .style.backgroundColor = "blue";
+      const neighborCoordsArray = JSON.parse(neighborCoords);
+      const neighbor = maze[neighborCoordsArray[0]][neighborCoordsArray[1]];
+      if (closedSet.has(neighbor)) {
+        continue;
+      }
+      neighbor.g = current.g + 1; // Assuming uniform cost
+      neighbor.h = h(neighbor, goal);
+      neighbor.parent = current;
+
+      if (!openSet.has(neighbor)) {
+        openSet.add(neighbor);
+        cameFrom.set(neighbor, current);
+      }
+    }
+  }
 };
 
 export const mazeToGraph = (maze) => {
@@ -104,6 +165,7 @@ export const renderMaze = (mazeEl, maze) => {
       cellEl.classList.add("cell");
       cellEl.style.left = `${coords[1] * 50 + (x > 0 && y > 0 ? 1 : 0)}px`;
       cellEl.style.top = `${coords[0] * 50 + (x > 0 && y > 0 ? 1 : 0)}px`;
+      cellEl.id = `cell-${x}-${y}`;
 
       if (randomStartx == x && randomStarty == y) {
         cellEl.innerHTML = "Start";
