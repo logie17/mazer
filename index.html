@@ -1,11 +1,13 @@
 <html>
   <head>
     <script type="module">
-    import { buildMaze, renderMaze } from './mazer.js';
+    import { buildMaze, renderMaze, mazeToGraph } from './mazer.js';
     document.addEventListener('DOMContentLoaded', () => {
       const mazeEl = document.getElementById('maze');
       const maze = buildMaze(mazeEl);
-       renderMaze(mazeEl, maze);
+      renderMaze(mazeEl, maze);
+      const graph = mazeToGraph(maze);
+      console.log("#Graph", graph);
     });
     </script>
     <style>
