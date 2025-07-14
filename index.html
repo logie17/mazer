@@ -8,7 +8,16 @@
       renderMaze(mazeEl, maze);
       const graph = mazeToGraph(maze);
       const path = aStar(start, end, () => {}, graph, maze)
-      console.log("#Path", path);
+      const idx = setInterval(() => {
+        const node = path.shift();
+        if (!node) {
+          clearInterval(idx);
+          return;
+        }
+        const current = maze[node.coords[0]][node.coords[1]];
+        document.getElementById(`cell-${current.coords[0]}-${current.coords[1]}`)
+        .style.backgroundColor = "blue";
+      }, 300);
     });
     </script>
     <style>

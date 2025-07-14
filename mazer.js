@@ -84,8 +84,6 @@ export const aStar = (start, goal, h, graph, maze) => {
       current.coords[0] === goal.coords[0] &&
       current.coords[1] === goal.coords[1]
     ) {
-      console.log("#### HERE222");
-
       const path = [];
       let temp = current;
       while (temp) {
@@ -102,9 +100,6 @@ export const aStar = (start, goal, h, graph, maze) => {
       const neighborCoords
         of graph[`[${current.coords[0]},${current.coords[1]}]`]
     ) {
-      console.log("#### HERE111");
-      document.getElementById(`cell-${current.coords[0]}-${current.coords[1]}`)
-        .style.backgroundColor = "blue";
       const neighborCoordsArray = JSON.parse(neighborCoords);
       const neighbor = maze[neighborCoordsArray[0]][neighborCoordsArray[1]];
       if (closedSet.has(neighbor)) {
