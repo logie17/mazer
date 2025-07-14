@@ -75,11 +75,7 @@ export const aStar = (start, goal, h, graph, maze) => {
   start.parent = null;
 
   while (openSet.size > 0) {
-    const current = Array.from(openSet).reduce((
-      a,
-      b,
-    ) => (a.g + a.h < b.g + b.h ? a : b));
-
+    const current = [...openSet].sort((a, b) => a.f - b.f)[0];
     if (
       current.coords[0] === goal.coords[0] &&
       current.coords[1] === goal.coords[1]
@@ -105,13 +101,22 @@ export const aStar = (start, goal, h, graph, maze) => {
       if (closedSet.has(neighbor)) {
         continue;
       }
-      neighbor.g = current.g + 1; // Assuming uniform cost
-      neighbor.h = h(neighbor, goal);
-      neighbor.parent = current;
 
-      if (!openSet.has(neighbor)) {
-        openSet.add(neighbor);
-        cameFrom.set(neighbor, current);
+      const tenG = current.g + 1;
+      if (!neighbor.g) {
+        neighbor.g = Infinity;
+      }
+
+      if (tenG < neighbor.g) {
+        neighbor.parent = current;
+
+        neighbor.g = tenG;
+        neighbor.h = h(neighbor, goal);
+        neighbor.f = neighbor.g + neighbor.h;
+        if (!openSet.has(neighbor)) {
+          openSet.add(neighbor);
+          cameFrom.set(neighbor, current);
+        }
       }
     }
   }

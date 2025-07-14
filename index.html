@@ -7,7 +7,9 @@
       const {maze, start, end } = buildMaze(mazeEl);
       renderMaze(mazeEl, maze);
       const graph = mazeToGraph(maze);
-      const path = aStar(start, end, () => {}, graph, maze)
+      const path = aStar(start, end, (start, goal) => {
+        return Math.abs(start.coords[0] - goal.coords[0]) + Math.abs(start.coords[1] - goal.coords[1])  
+      }, graph, maze)
       const idx = setInterval(() => {
         const node = path.shift();
         if (!node) {
@@ -16,7 +18,7 @@
         }
         const current = maze[node.coords[0]][node.coords[1]];
         document.getElementById(`cell-${current.coords[0]}-${current.coords[1]}`)
-        .style.backgroundColor = "blue";
+                .style.backgroundColor = "blue";
       }, 300);
     });
     </script>
