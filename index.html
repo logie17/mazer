@@ -10,10 +10,10 @@
       const path = aStar(start, end, (start, goal) => {
         return Math.abs(start.coords[0] - goal.coords[0]) + Math.abs(start.coords[1] - goal.coords[1])  
       }, graph, maze)
-      const idx = setInterval(() => {
+      const intv = setInterval(() => {
         const node = path.shift();
         if (!node) {
-          clearInterval(idx);
+          clearInterval(intv);
           return;
         }
         const current = maze[node.coords[0]][node.coords[1]];
